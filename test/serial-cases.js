@@ -49,6 +49,10 @@ export const CASES = [
   { from: 'manufacturer', brand: 'Rinnai', serial: 'BH.AB-000123', expect: { year: 2010, month: 8 } },
   { from: 'manufacturer', brand: 'Rinnai', serial: 'BHAB000123', expect: { year: 2010, month: 8 } },
   { from: 'manufacturer', brand: 'Rinnai', serial: '03.06-001000', expect: { year: 2003, month: 6 } },
+  // Real Rinnai tags found online. The R75-LSi tag prints "May 2008" next to its serial.
+  { from: 'plate', brand: 'Rinnai', serial: '08.05-130411', expect: { year: 2008, month: 5 } }, // R75-LSi
+  { from: 'plate', brand: 'Rinnai', serial: 'BL.CA-051306', expect: { year: 2010, month: 11 } }, // R94LSi
+  { from: 'plate', brand: 'Rinnai', serial: 'EA.CA-002797', expect: { year: 2013, month: 1 } }, // RL75e
   { from: 'guard', brand: 'Rinnai', serial: 'BI.AB-000123', expect: { unknown: 'no-matching-format' } },
   { from: 'guard', brand: 'Rinnai', serial: 'XA.AB-000123', expect: { unknown: 'future-date' } },
   { from: 'guard', brand: 'Rinnai', serial: '12.06-001000', expect: { unknown: 'outside-format-era' } },
