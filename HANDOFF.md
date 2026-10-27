@@ -2,21 +2,27 @@
 
 **Goal:** v1 of Sightglass (see `SPEC.md`). Working through the build order, one issue per PR.
 
-**Done (2026-10-27):** issue #1 serial decoder, on branch `issue-1-serial-decoder`.
-- `public/js/serial/rules.js` holds brand rules as data with sources. `decode.js` is the engine.
-- `test/serial-cases.js` holds the cases, and `npm test` runs them (38 passing).
-- Covered: Rheem/Ruud/Richmond, A.O. Smith/State/American/Reliance, Lochinvar, Rinnai.
+**Done:**
+- Issue #1 serial decoder, merged (PR #10). Rules in `public/js/serial/rules.js`.
+- Issue #2 app shell, on branch `issue-2-app-shell` (PR open, waiting for Chris to approve).
+  Home and results screens, photo shrink plus EXIF/GPS strip, trust labels, PWA (manifest,
+  icons, `sw.js`). Final design and flame logo applied (`icons/logo.svg`, cache `sightglass-v3`).
+  49 tests pass (`npm test`). Tested in Chrome on the PC. Mockups: claude.ai artifact
+  9ggpCfbeNZkEEQVM4PHKno (the "Final" row is what was built).
 
 **Next:**
-1. Chris reviews the PR and merges it.
-2. Add real plates as Chris collects them: he drops photos in a Google Drive folder
-   ("sightglass plates"). Add each as a `from: 'plate'` case (brand, serial, printed date only).
-3. Navien: turn on a rule once 2+ real plates (or Navien tech support) confirm one.
-4. Issue #2, the app shell.
+1. Chris looks at the app and approves the PR.
+2. Issue #3, the Worker `/api/scan` with a mock Claude response first.
+3. Real plates: Chris is collecting photos in the Google Drive folder "sightglass plates"
+   (Navien and Rinnai tags from online this week). Add each as a `from: 'plate'` case in
+   `test/serial-cases.js` (brand, serial, printed date only, never the photo).
 
-**Open questions:** Navien date format. Do Lochinvar residential tanks use 13-digit serials
-(and which order)? Is the Rheem MMYY format pre-2000?
+**Open questions:** the Navien date format. Do Lochinvar residential tanks use 13-digit serials?
+Final app name.
 
-**Gotchas:** the decoder takes an `equipment` id (see `public/js/equipment.js`), and 13-digit
-Lochinvar serials need it to be `boiler`. Tests pin "today" to 2026-10-27 so the future-date
-checks stay stable.
+**Gotchas:**
+- Run locally: on the PC `$env:PORT='8090'; npm start` (8080 is taken), on the laptop `npm start`.
+- The service worker is cache-first. Bump `CACHE` in `sw.js` for changes, or unregister it in
+  DevTools while working.
+- Add any new file in `public/` to `SHELL` in `sw.js`, or a test fails.
+- Icons come from `npm run icons` (`scripts/make-icons.js`).

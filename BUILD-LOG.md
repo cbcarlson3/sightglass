@@ -27,3 +27,31 @@ What was built, what broke, and what I learned, one entry per step.
 - **Learned:** the same 13-digit serial reads year-first at A.O. Smith but week-first on
   Lochinvar boilers, so the equipment type matters. When it's missing, the answer is "unknown".
   Checking for impossible dates (week 60, a year in the future) catches many bad reads.
+
+## 2026-10-27: App shell (issue #2)
+
+- **Built:** the phone app's home screen ("Take photo" / "Choose from photos", with the big
+  buttons at the bottom where a thumb reaches) and a results screen that runs on sample data.
+  Every value carries a trust label, and the age comes from the real decoder. It also has a
+  manifest, icons and a service worker, so it installs to the home screen and opens offline.
+- **Photos:** each one is shrunk to 1568 px on the long edge (the size Claude reads best) and
+  re-saved, which drops the EXIF and GPS data. A second pass then strips any metadata left in
+  the file bytes. In Chrome, a 4000×3000 test photo with fake GPS came out at 1568×1176 with the
+  GPS gone.
+- **What broke:** "Unreadable" showed twice (once as the value, once as the label). Port 8080 was
+  already taken on the PC, so the local server takes a `PORT` setting.
+- **Learned:** no image library was installed, so the icons are drawn pixel by pixel in a small
+  Node script. A test checks that the service worker caches every app file, so a new file can't
+  be forgotten and break offline mode.
+
+## 2026-10-27: Final look and logo (issue #2, same PR)
+
+- **Built:** Chris picked a direction after three rounds of mockups (6 designs, then a final).
+  The app now uses the "soft steel" colors, a clearer home screen ("Take a photo of the tag."
+  plus three short steps), and a results screen with an age gauge and spec tiles. The new logo
+  is a bolted sight glass with a gas flame behind the glass. It's an SVG for the app header and
+  is redrawn as PNG icons by the same Node script.
+- **What broke:** nothing major. The icon script had to learn curves, so the flame's outline is
+  turned into a list of points and each pixel is tested against it.
+- **Learned:** mocking up several options side by side made the design calls quick. The labels
+  now say "tag" instead of "plate", because that's the word techs use.
