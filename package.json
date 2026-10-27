@@ -1,0 +1,9 @@
+{
+  "name": "sightglass",
+  "private": true,
+  "type": "module",
+  "description": "Reads a water heater or boiler data plate from a photo.",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}
