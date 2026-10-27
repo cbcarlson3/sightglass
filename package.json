@@ -4,6 +4,8 @@
   "type": "module",
   "description": "Reads a water heater or boiler data plate from a photo.",
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "start": "node scripts/serve.js",
+    "icons": "node scripts/make-icons.js"
   }
 }

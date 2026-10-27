@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; img-src 'self' blob: data:; script-src 'self'; style-src 'self'">
+  <title>Sightglass</title>
+  <meta name="description" content="Read a water heater or boiler data plate from a photo.">
+  <meta name="theme-color" content="#0b1220">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="css/app.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <img src="icons/icon-192.png" alt="" width="32" height="32">
+    <h1>Sightglass</h1>
+  </header>
+
+  <main>
+    <section id="home" class="view">
+      <div class="intro">
+        <p class="lead">Take a photo of the data plate on a water heater or boiler.</p>
+        <p class="muted">Get close, fill the screen with the label, and use your flashlight if it's dark.</p>
+      </div>
+      <p id="photo-status" class="status" role="status" hidden></p>
+      <div class="actions">
+        <button id="take-photo" class="btn btn-primary" type="button">📷 Take photo</button>
+        <button id="pick-photo" class="btn" type="button">🖼️ Choose from photos</button>
+        <button id="show-sample" class="btn btn-quiet" type="button">Show a sample result</button>
+      </div>
+      <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+      <input id="gallery-input" type="file" accept="image/*" hidden>
+    </section>
+
+    <section id="results" class="view" hidden>
+      <p class="banner">Sample data. Reading real plates comes in step 4.</p>
+      <img id="result-photo" class="result-photo" alt="Your photo of the data plate" hidden>
+      <p id="photo-info" class="muted small" hidden></p>
+      <div id="result-body"></div>
+      <div class="actions">
+        <button id="new-scan" class="btn btn-primary" type="button">New scan</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
