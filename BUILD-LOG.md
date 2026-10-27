@@ -43,3 +43,15 @@ What was built, what broke, and what I learned, one entry per step.
 - **Learned:** no image library was installed, so the icons are drawn pixel by pixel in a small
   Node script. A test checks that the service worker caches every app file, so a new file can't
   be forgotten and break offline mode.
+
+## 2026-10-27: Final look and logo (issue #2, same PR)
+
+- **Built:** Chris picked a direction after three rounds of mockups (6 designs, then a final).
+  The app now uses the "soft steel" colors, a clearer home screen ("Take a photo of the tag."
+  plus three short steps), and a results screen with an age gauge and spec tiles. The new logo
+  is a bolted sight glass with a gas flame behind the glass. It's an SVG for the app header and
+  is redrawn as PNG icons by the same Node script.
+- **What broke:** nothing major. The icon script had to learn curves, so the flame's outline is
+  turned into a list of points and each pixel is tested against it.
+- **Learned:** mocking up several options side by side made the design calls quick. The labels
+  now say "tag" instead of "plate", because that's the word techs use.

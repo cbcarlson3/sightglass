@@ -9,6 +9,8 @@ import { fieldsFor, PLATE_FIELDS } from '../public/js/plate-fields.js';
 import { EQUIPMENT_TYPES } from '../public/js/equipment.js';
 import { SAMPLE_SCAN } from '../public/js/sample-scan.js';
 import { decodeSerial } from '../public/js/serial/decode.js';
+import { gaugePoint, GAUGE_MAX } from '../public/js/results.js';
+import { TRUST } from '../public/js/trust.js';
 
 const PUBLIC = fileURLToPath(new URL('../public/', import.meta.url));
 const TODAY = new Date('2026-10-27T12:00:00Z');
@@ -84,6 +86,20 @@ test('the sample scan has every field and decodes to a date', () => {
   const { brand, serial } = SAMPLE_SCAN.plate;
   const result = decodeSerial({ brand: brand.value, serial: serial.value }, { today: TODAY });
   assert.equal(result.status, 'decoded');
+});
+
+test('the age gauge runs left to right and pins at the end', () => {
+  assert.deepEqual(gaugePoint(0, 120), { x: 30, y: 150 });
+  assert.deepEqual(gaugePoint(GAUGE_MAX / 2, 120), { x: 150, y: 30 });
+  assert.deepEqual(gaugePoint(GAUGE_MAX, 120), { x: 270, y: 150 });
+  assert.deepEqual(gaugePoint(35, 120), gaugePoint(GAUGE_MAX, 120));
+});
+
+test('every trust label has an icon the results screen can draw', () => {
+  const results = readFileSync(join(PUBLIC, 'js/results.js'), 'utf8');
+  for (const [kind, trust] of Object.entries(TRUST)) {
+    assert.match(results, new RegExp(`\\b${trust.icon}: \\[`), `${kind} uses a missing icon`);
+  }
 });
 
 function listFiles(dir) {

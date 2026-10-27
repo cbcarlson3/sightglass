@@ -29,7 +29,7 @@ portfolio piece, so the code, the spec, the issues and the build log are all mea
 - **Boilers:** Navien and Rinnai combis plus Lochinvar and Viessmann first. The AI handles any
   other brand.
 - **Trust labels:** each result shows where it came from.
-  - ✅ **Read from plate:** text the AI read straight off the photo.
+  - ✅ **Read from tag:** text the AI read straight off the photo.
   - ✅ **Decoded:** worked out by our own serial rules, so it's exact.
   - ⚠️ **AI suggestion, verify with the manual:** error codes, fixes and parts.
   - If the AI can't read a field, it says "unreadable" instead of guessing.

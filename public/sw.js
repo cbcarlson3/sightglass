@@ -1,7 +1,7 @@
 // Service worker: keeps the app shell on the phone so it opens with no signal.
 // Bump CACHE on every change that should reach the phone (see CLAUDE.md).
 
-const CACHE = 'sightglass-v1';
+const CACHE = 'sightglass-v2';
 
 const SHELL = [
   './',
@@ -22,6 +22,7 @@ const SHELL = [
   'icons/icon-192.png',
   'icons/icon-512.png',
   'icons/icon-maskable-512.png',
+  'icons/logo.svg',
 ];
 
 self.addEventListener('install', (event) => {

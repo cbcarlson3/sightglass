@@ -6,7 +6,9 @@
 - Issue #1 serial decoder, merged (PR #10). Rules in `public/js/serial/rules.js`.
 - Issue #2 app shell, on branch `issue-2-app-shell` (PR open, waiting for Chris to approve).
   Home and results screens, photo shrink plus EXIF/GPS strip, trust labels, PWA (manifest,
-  icons, `sw.js`). 47 tests pass (`npm test`). Tested in Chrome on the PC.
+  icons, `sw.js`). Final design and flame logo applied (`icons/logo.svg`, cache `sightglass-v2`).
+  49 tests pass (`npm test`). Tested in Chrome on the PC. Mockups: claude.ai artifact
+  9ggpCfbeNZkEEQVM4PHKno (the "Final" row is what was built).
 
 **Next:**
 1. Chris looks at the app and approves the PR.
@@ -15,7 +17,8 @@
    (Navien and Rinnai tags from online this week). Add each as a `from: 'plate'` case in
    `test/serial-cases.js` (brand, serial, printed date only, never the photo).
 
-**Open questions:** the Navien date format. Do Lochinvar residential tanks use 13-digit serials?
+**Open questions:** whether to add the Manrope font file (the CSS falls back to the phone's
+font until then). The Navien date format. Do Lochinvar residential tanks use 13-digit serials?
 Final app name.
 
 **Gotchas:**
