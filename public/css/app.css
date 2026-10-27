@@ -1,5 +1,13 @@
-/* Soft steel on dark, big and high-contrast: made for one hand in a dark basement.
-   Manrope is used when it's installed; otherwise the phone's own font. */
+/* Soft steel on dark, big and high-contrast: made for one hand in a dark basement. */
+
+/* Manrope (SIL Open Font License, see licenses/Manrope-OFL.txt), Latin letters only. */
+@font-face {
+  font-family: Manrope;
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(../fonts/manrope-latin.woff2) format("woff2");
+}
 
 :root {
   --bg: #0e1726;
