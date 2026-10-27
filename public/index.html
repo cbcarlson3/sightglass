@@ -57,10 +57,51 @@
           <svg class="ico" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg>
           Choose from photos
         </button>
+        <button id="type-serial" class="btn" type="button">
+          <svg class="ico" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"/></svg>
+          Type in serial number
+        </button>
         <button id="show-sample" class="btn-link" type="button">See a sample result</button>
       </div>
       <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
       <input id="gallery-input" type="file" accept="image/*" hidden>
+    </section>
+
+    <section id="manual" class="view" hidden>
+      <div class="results-top">
+        <button id="manual-back" class="btn-back" type="button">
+          <svg class="ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+          Back
+        </button>
+      </div>
+      <div class="intro">
+        <p class="headline headline-sm">Type in the serial.</p>
+        <p class="muted">For when a photo won't work. You'll get the unit's age.</p>
+      </div>
+      <form id="manual-form" class="form" novalidate>
+        <label class="field">
+          <span class="field-label">Brand</span>
+          <select id="manual-brand">
+            <option value="" disabled selected>Choose a brand</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="field-label">Serial number</span>
+          <input id="manual-serial" type="text" autocomplete="off" autocapitalize="characters"
+            spellcheck="false" enterkeyhint="go" placeholder="Example: 0912D01234">
+          <span class="field-hint">Type it exactly as printed. Dots and dashes are fine.</span>
+        </label>
+        <label class="field">
+          <span class="field-label">Type of unit <span class="muted">(if you know it)</span></span>
+          <select id="manual-equipment">
+            <option value="">Not sure</option>
+          </select>
+        </label>
+        <p id="manual-error" class="status error" role="alert" hidden></p>
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">Get the age</button>
+        </div>
+      </form>
     </section>
 
     <section id="results" class="view" hidden>
@@ -69,7 +110,7 @@
           <svg class="ico" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
           New scan
         </button>
-        <span class="pill pill-warn" title="Reading real tags comes in step 4">Sample data</span>
+        <span id="sample-pill" class="pill pill-warn" title="Reading real tags comes in step 4">Sample data</span>
       </div>
       <img id="result-photo" class="result-photo" alt="Your photo of the data tag" hidden>
       <p id="photo-info" class="muted small" hidden></p>

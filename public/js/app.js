@@ -1,5 +1,7 @@
 // App start-up: wires the buttons, switches between the home and results screens.
 
+import { EQUIPMENT_TYPES } from './equipment.js';
+import { brandChoices, manualScan, OTHER_BRAND } from './manual.js';
 import { formatBytes, preparePhoto } from './photo.js';
 import { renderResults } from './results.js';
 import { SAMPLE_SCAN } from './sample-scan.js';
@@ -45,6 +47,7 @@ async function onPhotoChosen(event) {
 
 function showSample() {
   renderResults($('result-body'), SAMPLE_SCAN);
+  $('sample-pill').hidden = false;
   show('results');
 }
 
@@ -54,13 +57,45 @@ function newScan() {
   show('home');
 }
 
+// The brand and equipment lists come from the decoder's data, so a new brand shows up here too.
+function fillManualForm() {
+  const options = (select, items) => select.append(...items.map(([value, text]) => {
+    const option = document.createElement('option');
+    option.value = value;
+    option.textContent = text;
+    return option;
+  }));
+  options($('manual-brand'), [...brandChoices().map((name) => [name, name]), [OTHER_BRAND, 'Other (not listed)']]);
+  options($('manual-equipment'), EQUIPMENT_TYPES.map((type) => [type.id, type.label]));
+}
+
+function onManualSubmit(event) {
+  event.preventDefault();
+  const brand = $('manual-brand').value;
+  const serial = $('manual-serial').value.trim();
+  const problem = !brand ? 'Choose a brand.' : !serial ? 'Type in the serial number.' : '';
+  $('manual-error').textContent = problem;
+  $('manual-error').hidden = !problem;
+  if (problem) return;
+
+  renderResults($('result-body'), manualScan({ brand, serial, equipment: $('manual-equipment').value }));
+  $('sample-pill').hidden = true;
+  $('result-photo').hidden = true;
+  $('photo-info').hidden = true;
+  show('results');
+}
+
+fillManualForm();
 $('take-photo').addEventListener('click', () => $('camera-input').click());
 $('pick-photo').addEventListener('click', () => $('gallery-input').click());
+$('type-serial').addEventListener('click', () => show('manual'));
 $('camera-input').addEventListener('change', onPhotoChosen);
 $('gallery-input').addEventListener('change', onPhotoChosen);
 $('show-sample').addEventListener('click', showSample);
 $('new-scan').addEventListener('click', newScan);
 $('back').addEventListener('click', newScan);
+$('manual-back').addEventListener('click', () => show('home'));
+$('manual-form').addEventListener('submit', onManualSubmit);
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch((error) => console.warn('Offline mode off:', error));

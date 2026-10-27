@@ -1,7 +1,7 @@
 // Service worker: keeps the app shell on the phone so it opens with no signal.
 // Bump CACHE on every change that should reach the phone (see CLAUDE.md).
 
-const CACHE = 'sightglass-v4';
+const CACHE = 'sightglass-v5';
 
 const SHELL = [
   './',
@@ -11,6 +11,7 @@ const SHELL = [
   'fonts/manrope-latin.woff2',
   'js/app.js',
   'js/equipment.js',
+  'js/manual.js',
   'js/photo.js',
   'js/plate-fields.js',
   'js/results.js',

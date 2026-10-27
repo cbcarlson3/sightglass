@@ -67,3 +67,13 @@ What was built, what broke, and what I learned, one entry per step.
 - **Learned:** when a maker doesn't publish its code, recall notices can, because they have to
   tell owners which serials are affected. Months Y and Z (Nov, Dec) aren't confirmed yet, so
   those show the year only instead of guessing.
+## 2026-10-27: Type in a serial (issue #14)
+
+- **Built:** a "Type in serial number" button on the home screen, for when the camera won't
+  work. Pick the brand, type the serial, optionally pick the type of unit, and get the age
+  gauge. The brand list comes straight from the decoder's rules, so a new brand shows up on its
+  own. Typed values get their own trust label, "Typed in", so they're never shown as read from
+  a tag, and nothing else (specs, codes, parts) is filled in without a photo.
+- **Also:** three real Rinnai tags joined the tests (issue #12). One prints "May 2008" next to
+  its serial, which confirms the Rinnai rule.
+- **Learned:** keeping the brand list as data paid off: the form needed no brand-specific code.

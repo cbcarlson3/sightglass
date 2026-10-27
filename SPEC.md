@@ -30,6 +30,8 @@ portfolio piece, so the code, the spec, the issues and the build log are all mea
   other brand.
 - **Trust labels:** each result shows where it came from.
   - ✅ **Read from tag:** text the AI read straight off the photo.
+  - ✏️ **Typed in:** a serial (and brand) the user typed by hand, when a photo isn't possible.
+    This gives the age only; specs, error codes and parts need a photo.
   - ✅ **Decoded:** worked out by our own serial rules, so it's exact.
   - ⚠️ **AI suggestion, verify with the manual:** error codes, fixes and parts.
   - If the AI can't read a field, it says "unreadable" instead of guessing.
