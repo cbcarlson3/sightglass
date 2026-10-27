@@ -4,25 +4,26 @@
 
 **Done:**
 - Issue #1 serial decoder, merged (PR #10). Rules in `public/js/serial/rules.js`.
-- Issue #2 app shell, on branch `issue-2-app-shell` (PR open, waiting for Chris to approve).
-  Home and results screens, photo shrink plus EXIF/GPS strip, trust labels, PWA (manifest,
-  icons, `sw.js`). Final design and flame logo applied (`icons/logo.svg`, cache `sightglass-v3`).
-  49 tests pass (`npm test`). Tested in Chrome on the PC. Mockups: claude.ai artifact
-  9ggpCfbeNZkEEQVM4PHKno (the "Final" row is what was built).
+- Issue #2 app shell, merged (PR #11). Final design (soft steel colors, Manrope font, age gauge)
+  and the flame sight-glass logo (`icons/logo.svg`, PNGs from `npm run icons`). Cache
+  `sightglass-v3`. Mockups: claude.ai artifact 9ggpCfbeNZkEEQVM4PHKno ("Final" row).
+- Issue #12 Navien dates, on branch `issue-12-navien` (PR open, waiting for Chris). Rule from
+  CPSC recall 19-057 plus building-center.org; 5 real tags from Drive "sightglass plates" are
+  test cases. Cache `sightglass-v4`. 60 tests pass.
 
 **Next:**
-1. Chris looks at the app and approves the PR.
+1. Chris approves the Navien PR.
 2. Issue #3, the Worker `/api/scan` with a mock Claude response first.
-3. Real plates: Chris is collecting photos in the Google Drive folder "sightglass plates"
-   (Navien and Rinnai tags from online this week). Add each as a `from: 'plate'` case in
-   `test/serial-cases.js` (brand, serial, printed date only, never the photo).
+3. More real tags in Drive "sightglass plates" (Rinnai next). Add each as a `from: 'plate'` case
+   in `test/serial-cases.js` (brand, serial, date only, never the photo).
 
-**Open questions:** the Navien date format. Do Lochinvar residential tanks use 13-digit serials?
-Final app name.
+**Open questions:** Navien Y/Z months (Nov/Dec) are unconfirmed, so they show the year only; a
+tag with a known Nov/Dec date would settle it. Do Lochinvar residential tanks use 13-digit
+serials? Final app name.
 
 **Gotchas:**
 - Run locally: on the PC `$env:PORT='8090'; npm start` (8080 is taken), on the laptop `npm start`.
 - The service worker is cache-first. Bump `CACHE` in `sw.js` for changes, or unregister it in
   DevTools while working.
 - Add any new file in `public/` to `SHELL` in `sw.js`, or a test fails.
-- Icons come from `npm run icons` (`scripts/make-icons.js`).
+- PowerShell 5.1: use `gh ... --body-file` and `git commit -F <file>`; inline multi-line text breaks.

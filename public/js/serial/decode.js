@@ -127,8 +127,10 @@ function readFormat(format, match, today) {
     if (week === null || week < 1 || week > 53) return { problem: 'no-matching-format' };
   }
 
+  // A day only means something with its month. If the month letter was left out on purpose
+  // (see unmappedMonthNote), the date stays at the year.
   let day = null;
-  if (format.day) {
+  if (format.day && !(month === null && format.month)) {
     day = readField(format.day, match);
     const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
     if (day === null || month === null || day < 1 || day > daysInMonth) {

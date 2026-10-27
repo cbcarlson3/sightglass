@@ -40,6 +40,13 @@ const RINNAI_YEARS = {
   Z: 2029,
 };
 
+// Navien month digits. CPSC recall 19-057 confirms 1-9 and X = October. building-center.org
+// says Y and Z are November and December, but no Navien source confirms that yet, so they are
+// left out on purpose: those serials decode to the year only.
+const NAVIEN_MONTHS = {
+  1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, X: 10,
+};
+
 export const BRAND_FAMILIES = [
   {
     id: 'rheem',
@@ -199,13 +206,37 @@ export const BRAND_FAMILIES = [
   {
     id: 'navien',
     name: 'Navien',
-    aliases: ['navien', 'navieninc', 'navienamerica'],
-    // Navien does not publish how to read its serial numbers. Its NPE service manual (v2.22,
-    // Sept 2015) and navieninc.com FAQs only say where the label is. Third-party guides disagree
-    // with each other, so there is no rule yet. Turn this on, with formats, once real plates
-    // (or Navien tech support, 800-519-8794) confirm one.
-    verified: false,
-    unverifiedNote: 'Navien does not publish its serial date code. We will add it once real plates confirm it.',
-    formats: [],
+    aliases: ['navien', 'navieninc', 'navienamerica', 'navienamericainc'],
+    verified: true,
+    formats: [
+      {
+        // CPSC recall 19-057 (Navien, December 2018): "The first two digits identify the year,
+        // the next single digit identifies the month, and the last two digits identify the day.
+        // For example, 18709 stands for July 9, 2018 ... X stands for October." The recalled
+        // serials are laid out as product code, a letter, then that date: 7410x18709xxxx
+        // (NPE-180A), 7410x18X14xxxx. building-center.org/navien-water-heater-age gives the same
+        // positions (year in the 6th and 7th characters, month in the 8th, then the day).
+        // https://www.cpsc.gov/Recalls/2019/Navien-Recalls-Tankless-Water-Heaters-and-Boilers-Due-to-Risk-of-Carbon-Monoxide-Poisoning
+        id: 'navien-yymdd',
+        pattern: '^(\\d{4})([A-Z])(\\d{2})([1-9XYZ])(\\d{2})([A-Z0-9]{4,6})$',
+        year: { group: 3, as: 'yy', century: 2000 },
+        month: { group: 4, as: 'letter', table: NAVIEN_MONTHS },
+        day: { group: 5, as: 'number' },
+        unmappedMonthNote: 'Navien\'s recall notice only confirms months 1-9 and X (October), so only the year is shown.',
+        source: 'CPSC recall 19-057 (Navien, December 2018)',
+      },
+      {
+        // building-center.org/navien-water-heater-age, styles 3 and 4: older serials with dashes,
+        // example 9262-20081208-1027, where characters 5-8 are the year. The 8 digits are a full
+        // date (year, month, day); a real NCB-240 tag reads 7966-20131017-2070.
+        id: 'navien-dashed-yyyymmdd',
+        pattern: '^(\\d{4})-?(\\d{4})(\\d{2})(\\d{2})-?(\\d{4})$',
+        year: { group: 2, as: 'number' },
+        month: { group: 3, as: 'number' },
+        day: { group: 4, as: 'number' },
+        validFrom: '2006-01',
+        source: 'building-center.org Navien age guide (dashed serials), checked against a real NCB-240 tag',
+      },
+    ],
   },
 ];
