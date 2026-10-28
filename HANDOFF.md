@@ -15,7 +15,7 @@
 
 **Next:**
 1. Issue #3, the Worker `/api/scan` with a mock Claude response first.
-3. More real tags in Drive "sightglass plates" (Rinnai next). Add each as a `from: 'plate'` case
+2. More real tags in Drive "sightglass plates" (Rheem, A.O. Smith, Lochinvar still have none). Add each as a `from: 'plate'` case
    in `test/serial-cases.js` (brand, serial, date only, never the photo).
 
 **Open questions:** Navien Y/Z months (Nov/Dec) are unconfirmed, so they show the year only; a
