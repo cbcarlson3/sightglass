@@ -55,3 +55,15 @@ What was built, what broke, and what I learned, one entry per step.
   turned into a list of points and each pixel is tested against it.
 - **Learned:** mocking up several options side by side made the design calls quick. The labels
   now say "tag" instead of "plate", because that's the word techs use.
+## 2026-10-27: Navien dates (issue #12)
+
+- **Built:** Navien was the one brand the app couldn't date, because Navien doesn't publish its
+  serial format. A 2018 government recall notice (CPSC 19-057) explains it: after a 4-digit
+  product code and a letter come the year, a one-character month (X = October) and the day.
+  Older Navien serials have the full date between dashes. Chris found five real Navien tags
+  online, and all five decode to years that match when those models were sold.
+- **What broke:** two of my made-up test serials were a digit short, so they failed for the
+  wrong reason. Caught by the tests.
+- **Learned:** when a maker doesn't publish its code, recall notices can, because they have to
+  tell owners which serials are affected. Months Y and Z (Nov, Dec) aren't confirmed yet, so
+  those show the year only instead of guessing.

@@ -2,9 +2,10 @@
 //
 // `from` says where each case came from:
 //   'manufacturer'  an example printed in the manufacturer's own document (see rules.js)
-//   'plate'         a real data plate Chris photographed. The expected date is the one printed on
-//                   the plate (or confirmed with the manufacturer). No photos, addresses or
-//                   customer details go in this public repo, only brand, serial and date.
+//   'plate'         a real data plate (photographed by Chris or found online). The expected date
+//                   is the one printed on the plate when it shows one; otherwise it is the rule's
+//                   answer, checked against the years that model was sold. No photos, addresses
+//                   or customer details go in this public repo, only brand, serial and date.
 //   'guard'         a made-up serial that must come back "unknown"
 //
 // expect: { year, month, week, day } for decoded serials, or { unknown: '<reason>' }.
@@ -48,12 +49,30 @@ export const CASES = [
   { from: 'manufacturer', brand: 'Rinnai', serial: 'BH.AB-000123', expect: { year: 2010, month: 8 } },
   { from: 'manufacturer', brand: 'Rinnai', serial: 'BHAB000123', expect: { year: 2010, month: 8 } },
   { from: 'manufacturer', brand: 'Rinnai', serial: '03.06-001000', expect: { year: 2003, month: 6 } },
+  // Real Rinnai tags found online. The R75-LSi tag prints "May 2008" next to its serial.
+  { from: 'plate', brand: 'Rinnai', serial: '08.05-130411', expect: { year: 2008, month: 5 } }, // R75-LSi
+  { from: 'plate', brand: 'Rinnai', serial: 'BL.CA-051306', expect: { year: 2010, month: 11 } }, // R94LSi
+  { from: 'plate', brand: 'Rinnai', serial: 'EA.CA-002797', expect: { year: 2013, month: 1 } }, // RL75e
   { from: 'guard', brand: 'Rinnai', serial: 'BI.AB-000123', expect: { unknown: 'no-matching-format' } },
   { from: 'guard', brand: 'Rinnai', serial: 'XA.AB-000123', expect: { unknown: 'future-date' } },
   { from: 'guard', brand: 'Rinnai', serial: '12.06-001000', expect: { unknown: 'outside-format-era' } },
 
-  // Navien: no published rule yet
-  { from: 'guard', brand: 'Navien', serial: '7414C14X1771143', expect: { unknown: 'rule-not-verified' } },
+  // Navien, CPSC recall 19-057. The recall prints serials with x for the hidden characters
+  // (7410x18709xxxx, 7410x18X14xxxx); here they are filled with A and 0.
+  { from: 'manufacturer', brand: 'Navien', serial: '7410A187090000', expect: { year: 2018, month: 7, day: 9 } },
+  { from: 'manufacturer', brand: 'Navien', serial: '7410A18X140000', expect: { year: 2018, month: 10, day: 14 } },
+  // Real Navien tags found online (no printed date; each fits the years its model was sold).
+  { from: 'plate', brand: 'Navien', serial: '7414C14X1771143', expect: { year: 2014, month: 10, day: 17 } }, // NPE-240A
+  { from: 'plate', brand: 'Navien', serial: '7410S1362212015', expect: { year: 2013, month: 6, day: 22 } }, // NPE-180A
+  { from: 'plate', brand: 'Navien', serial: '2087D2152871134', expect: { year: 2021, month: 5, day: 28 } }, // NPE-240A2
+  { from: 'plate', brand: 'Navien', serial: '2087D2231171896', expect: { year: 2022, month: 3, day: 11 } }, // NPE-240A2
+  { from: 'plate', brand: 'Navien', serial: '7966-20131017-2070', expect: { year: 2013, month: 10, day: 17 } }, // NCB-240
+  // Y and Z are not confirmed by Navien, so November and December give the year only.
+  { from: 'guard', brand: 'Navien', serial: '7410A18Y050000', expect: { year: 2018 } },
+  { from: 'guard', brand: 'Navien', serial: '7410A187320000', expect: { unknown: 'no-matching-format' } },
+  { from: 'guard', brand: 'Navien', serial: '7410A2X1010000', expect: { unknown: 'no-matching-format' } },
+  { from: 'guard', brand: 'Navien', serial: '7410A291010000', expect: { unknown: 'future-date' } },
+  { from: 'guard', brand: 'Navien', serial: '7966-20131317-2070', expect: { unknown: 'no-matching-format' } },
 
   // General guards
   { from: 'guard', brand: 'Bradford White', serial: 'XA1234567', expect: { unknown: 'brand-not-supported' } },
