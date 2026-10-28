@@ -11,6 +11,8 @@ import { SAMPLE_SCAN } from '../public/js/sample-scan.js';
 import { decodeSerial } from '../public/js/serial/decode.js';
 import { gaugePoint, GAUGE_MAX } from '../public/js/results.js';
 import { TRUST } from '../public/js/trust.js';
+import { brandChoices, manualScan, OTHER_BRAND } from '../public/js/manual.js';
+import { findFamily } from '../public/js/serial/decode.js';
 
 const PUBLIC = fileURLToPath(new URL('../public/', import.meta.url));
 const TODAY = new Date('2026-10-27T12:00:00Z');
@@ -100,6 +102,25 @@ test('every trust label has an icon the results screen can draw', () => {
   for (const [kind, trust] of Object.entries(TRUST)) {
     assert.match(results, new RegExp(`\\b${trust.icon}: \\[`), `${kind} uses a missing icon`);
   }
+});
+
+test('every brand in the type-in list finds its date rule', () => {
+  const names = brandChoices();
+  assert.ok(names.includes('Rheem') && names.includes('A.O. Smith') && names.includes('Navien'));
+  for (const name of names) assert.ok(findFamily(name), `${name} has no rule family`);
+});
+
+test('a typed serial is labeled "typed", never "read", and only fills what was typed', () => {
+  const scan = manualScan({ brand: 'Rheem', serial: ' 0912d01234 ', equipment: '' });
+  assert.equal(scan.source, 'manual');
+  assert.equal(scan.equipment, null);
+  assert.deepEqual(scan.plate, {
+    serial: { value: '0912D01234', status: 'typed' },
+    brand: { value: 'Rheem', status: 'typed' },
+  });
+  assert.equal(manualScan({ brand: OTHER_BRAND, serial: 'X1' }).plate.brand, undefined);
+  const result = decodeSerial({ brand: scan.plate.brand.value, serial: scan.plate.serial.value }, { today: TODAY });
+  assert.equal(result.status, 'decoded');
 });
 
 function listFiles(dir) {

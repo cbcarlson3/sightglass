@@ -22,34 +22,41 @@ const round = (n) => Math.round(n * 10) / 10;
 // Fields shown in the heading instead of as tiles.
 const HEADING_FIELDS = new Set(['brand', 'model']);
 
+// A field's value if it was read off the tag or typed in by hand, otherwise ''.
+const known = (field) => ((field?.status === 'read' || field?.status === 'typed') && field.value ? field.value : '');
+
+// scan.source is 'manual' when the user typed the serial in. Then only the typed fields are
+// shown, and there is no AI card, because no photo was read.
 export function renderResults(container, scan, { today = new Date() } = {}) {
   const plate = scan.plate ?? {};
+  const manual = scan.source === 'manual';
   const equipment = EQUIPMENT_TYPES.find((type) => type.id === scan.equipment);
 
   container.replaceChildren(
-    heading(plate, equipment),
+    heading(plate, equipment, manual),
     ageCard(plate, scan.equipment, today),
-    tagSection(plate, scan.equipment),
-    suggestionCard(scan.errorCodes ?? [], scan.parts ?? []),
+    tagSection(plate, scan.equipment, manual),
+    manual
+      ? el('p', { class: 'muted small center' }, 'Take a photo of the tag to also get specs, error codes and parts.')
+      : suggestionCard(scan.errorCodes ?? [], scan.parts ?? []),
   );
 }
 
-function heading(plate, equipment) {
-  const read = (field) => (field?.status === 'read' && field.value ? field.value : '');
-  const brand = read(plate.brand);
-  const model = read(plate.model);
+function heading(plate, equipment, manual) {
+  const brand = known(plate.brand);
+  const model = known(plate.model);
   return el('div', { class: 'result-head' }, [
     el('p', { class: 'unit-type' }, equipment?.label ?? 'Equipment type unknown'),
-    el('h2', { class: 'unit-brand' }, brand || 'Brand unreadable'),
-    el('p', { class: 'unit-model' }, model
-      ? [model, trustIcon('read')]
-      : [el('span', { class: 'muted' }, 'Model unreadable')]),
+    el('h2', { class: 'unit-brand' }, brand ? [brand, ' ', trustIcon(plate.brand.status)] : (manual ? 'Other brand' : 'Brand unreadable')),
+    ...(manual && !plate.model ? [] : [el('p', { class: 'unit-model' }, model
+      ? [model, trustIcon(plate.model.status)]
+      : [el('span', { class: 'muted' }, 'Model unreadable')])]),
   ]);
 }
 
 function ageCard(plate, equipment, today) {
-  const serial = plate.serial?.status === 'read' ? plate.serial.value : '';
-  const brand = plate.brand?.status === 'read' ? plate.brand.value : '';
+  const serial = known(plate.serial);
+  const brand = known(plate.brand);
   const result = decodeSerial({ brand, serial, equipment }, { today });
 
   if (result.status !== 'decoded') {
@@ -108,21 +115,28 @@ function gauge(years) {
   }, parts);
 }
 
-function tagSection(plate, equipment) {
-  const tiles = fieldsFor(equipment).filter((field) => !HEADING_FIELDS.has(field.id)).map((field) => {
+function tagSection(plate, equipment, manual) {
+  const fields = fieldsFor(equipment)
+    .filter((field) => !HEADING_FIELDS.has(field.id))
+    .filter((field) => !manual || plate[field.id]);
+  const kinds = new Set();
+  const tiles = fields.map((field) => {
     const reading = plate[field.id];
-    const readable = reading?.status === 'read' && reading.value;
-    const wide = field.id === 'serial' || !readable || String(reading.value).length > 14;
-    const classes = ['tile', wide && 'tile-wide', !readable && 'tile-unreadable', `tile-${field.id}`];
+    const value = known(reading);
+    if (value) kinds.add(reading.status);
+    const wide = field.id === 'serial' || !value || String(value).length > 14;
+    const classes = ['tile', wide && 'tile-wide', !value && 'tile-unreadable', `tile-${field.id}`];
     return el('div', { class: classes.filter(Boolean).join(' ') }, [
-      el('div', {}, [el('dt', {}, field.label), el('dd', {}, readable ? reading.value : TRUST.unreadable.text)]),
-      ...(readable ? [trustIcon('read')] : []),
+      el('div', {}, [el('dt', {}, field.label), el('dd', {}, value || TRUST.unreadable.text)]),
+      ...(value ? [trustIcon(reading.status)] : []),
     ]);
   });
   return el('section', {}, [
     el('div', { class: 'section-head' }, [
-      el('h2', {}, 'From the tag'),
-      el('span', { class: 'legend' }, [icon('check', 13), `= ${TRUST.read.text.toLowerCase()}`]),
+      el('h2', {}, manual ? 'What you typed' : 'From the tag'),
+      el('span', { class: 'legend' }, [...kinds].map((kind) => el('span', { class: `legend-item tone-${TRUST[kind].tone}` }, [
+        icon(TRUST[kind].icon, 13), `= ${TRUST[kind].text.toLowerCase()}`,
+      ]))),
     ]),
     el('dl', { class: 'tiles' }, tiles),
   ]);
@@ -158,6 +172,7 @@ function trustPill(kind) {
 // A small icon that stands for a trust label; screen readers hear the label.
 function trustIcon(kind) {
   const node = icon(TRUST[kind].icon, 16);
+  node.classList.add(`tone-${TRUST[kind].tone}`);
   node.setAttribute('role', 'img');
   node.setAttribute('aria-label', TRUST[kind].text);
   node.removeAttribute('aria-hidden');
@@ -166,6 +181,7 @@ function trustIcon(kind) {
 
 const ICONS = {
   check: ['M5 12l4 4 10-10'],
+  pencil: ['M4 20h4L19 9l-4-4L4 16z', 'M13.5 6.5l4 4'],
   alert: ['M12 3l10 18H2z', 'M12 10v5', 'M12 18v.01'],
   question: ['M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7v.5', 'M12 17.5v.01'],
 };
