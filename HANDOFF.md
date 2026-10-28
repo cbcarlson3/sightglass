@@ -7,15 +7,14 @@
 - Issue #2 app shell, merged (PR #11). Final design (soft steel colors, Manrope font, age gauge)
   and the flame sight-glass logo (`icons/logo.svg`, PNGs from `npm run icons`). Cache
   `sightglass-v3`. Mockups: claude.ai artifact 9ggpCfbeNZkEEQVM4PHKno ("Final" row).
-- Issue #12 Navien dates, on branch `issue-12-navien` (PR open, waiting for Chris). Rule from
+- Issue #12 Navien dates, merged (PR #13). Rule from
   CPSC recall 19-057 plus building-center.org; 5 real tags from Drive "sightglass plates" are
-  test cases, plus 3 real Rinnai tags (one prints "May 2008", confirming the rule). PR #13.
-- Issue #14 type-in serial, on branch `issue-14-manual-serial` (built on #12, PR #15). Home
-  button, form (`js/manual.js`), "Typed in" trust label. Cache `sightglass-v5`. 65 tests pass.
+  test cases, plus 3 real Rinnai tags (one prints "May 2008", confirming the rule).
+- Issue #14 type-in serial, merged (PR #15). Home button, form (`js/manual.js`), "Typed in"
+  trust label. Cache `sightglass-v5`. 65 tests pass.
 
 **Next:**
-1. Chris tests, then merge PR #13 first, then PR #15.
-2. Issue #3, the Worker `/api/scan` with a mock Claude response first.
+1. Issue #3, the Worker `/api/scan` with a mock Claude response first.
 3. More real tags in Drive "sightglass plates" (Rinnai next). Add each as a `from: 'plate'` case
    in `test/serial-cases.js` (brand, serial, date only, never the photo).
 
